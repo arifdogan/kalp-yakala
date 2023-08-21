@@ -1,0 +1,40 @@
+info.onScore(10, function () {
+    game.gameOver(true)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    sprites.destroy(kalp)
+    info.startCountdown(10)
+    info.changeScoreBy(1)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroy(Bomba)
+    pause(100)
+    info.changeLifeBy(-1)
+})
+let Bomba: Sprite = null
+let kalp: Sprite = null
+scene.setBackgroundColor(9)
+game.setDialogTextColor(12)
+game.showLongText("Oyunu kazanmak için 10 @kalp topla", DialogLayout.Bottom)
+game.showLongText("10 saniye içinde 1 @kalp yakalaman gerek yoksa zaman tükenecek", DialogLayout.Bottom)
+game.showLongText("ve @bomba dan kaçmayı unutma :)", DialogLayout.Bottom)
+info.setScore(0)
+info.setLife(3)
+info.startCountdown(10)
+let mySprite = sprites.create(assets.image`karakter`, SpriteKind.Player)
+controller.moveSprite(mySprite, 100, 0)
+mySprite.setPosition(80, 110)
+game.onUpdateInterval(2000, function () {
+    kalp = sprites.create(assets.image`kalp`, SpriteKind.Food)
+    kalp.setPosition(50, 0)
+    kalp.setVelocity(0, 80)
+    kalp.setPosition(randint(10, 110), 0)
+    kalp.setFlag(SpriteFlag.AutoDestroy, true)
+})
+game.onUpdateInterval(500, function () {
+    Bomba = sprites.create(assets.image`bomba`, SpriteKind.Enemy)
+    Bomba.setPosition(80, 0)
+    Bomba.setVelocity(0, 100)
+    Bomba.setPosition(randint(10, 110), 0)
+    Bomba.setFlag(SpriteFlag.AutoDestroy, true)
+})
